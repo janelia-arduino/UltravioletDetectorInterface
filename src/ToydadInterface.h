@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------------
-// ToydadInteface.h
+// ToydadInterface.h
 //
 //
 // Authors:
@@ -29,13 +29,13 @@
 #include <ModularDeviceBase.h>
 #include <SerialInterface.h>
 
-#include "ToydadInteface/Constants.h"
+#include "ToydadInterface/Constants.h"
 
 
-class ToydadInteface : public SerialInterface
+class ToydadInterface : public SerialInterface
 {
 public:
-  ToydadInteface();
+  ToydadInterface();
   virtual void setup();
 
 private:
@@ -44,7 +44,10 @@ private:
   modular_server::Function functions_[toydad_interface::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[toydad_interface::constants::CALLBACK_COUNT_MAX];
 
+  char response_[toydad_interface::constants::RESPONSE_SIZE_MAX];
+
   // Handlers
+  void getDetectorInfoHandler();
 
 };
 

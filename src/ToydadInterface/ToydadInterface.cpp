@@ -1,20 +1,20 @@
 // ----------------------------------------------------------------------------
-// ToydadInteface.cpp
+// ToydadInterface.cpp
 //
 //
 // Authors:
 // Peter Polidoro polidorop@janelia.hhmi.org
 // ----------------------------------------------------------------------------
-#include "../ToydadInteface.h"
+#include "../ToydadInterface.h"
 
 
 using namespace toydad_interface;
 
-ToydadInteface::ToydadInteface()
+ToydadInterface::ToydadInterface()
 {
 }
 
-void ToydadInteface::setup()
+void ToydadInterface::setup()
 {
   // Parent Setup
   SerialInterface::setup();
@@ -39,10 +39,24 @@ void ToydadInteface::setup()
                               callbacks_);
 
   // Properties
+  modular_server::Property & bauds_property = modular_server_.property(serial_interface::constants::bauds_property_name);
+  bauds_property.setDefaultValue(constants::bauds_default);
+  bauds_property.setSubset(constants::baud_subset);
+
+  modular_server::Property & formats_property = modular_server_.property(serial_interface::constants::formats_property_name);
+  formats_property.setDefaultValue(constants::formats_default);
+  formats_property.setSubset(constants::format_ptr_subset);
+
+  modular_server::Property & line_endings_property = modular_server_.property(serial_interface::constants::line_endings_property_name);
+  line_endings_property.setDefaultValue(constants::line_endings_default);
+  line_endings_property.setSubset(constants::line_ending_ptr_subset);
 
   // Parameters
 
   // Functions
+  modular_server::Function & get_detector_info_function = modular_server_.createFunction(constants::get_detector_info_function_name);
+  get_detector_info_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::getDetectorInfoHandler));
+  get_detector_info_function.setResultTypeObject();
 
   // Callbacks
 }
@@ -63,3 +77,17 @@ void ToydadInteface::setup()
 // modular_server_.property(property_name).setValue(value) value type must match the property default type
 // modular_server_.property(property_name).getElementValue(element_index,value) value type must match the property array element default type
 // modular_server_.property(property_name).setElementValue(element_index,value) value type must match the property array element default type
+
+void ToydadInterface::getDetectorInfoHandler()
+{
+  const char request[constants::REQUEST_SIZE_MAX] = "#DTr";
+  writeRead(request,response_,constants::RESPONSE_SIZE_MAX);
+
+  modular_server_.response().writeResultKey();
+
+  modular_server_.response().beginObject();
+
+  modular_server_.response().write("detector_name",response_);
+
+  modular_server_.response().endObject();
+}

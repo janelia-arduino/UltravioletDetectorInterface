@@ -19,10 +19,10 @@
 #include <ModularServer.h>
 #include <ModularDeviceBase.h>
 #include <SerialInterface.h>
-#include <ToydadInteface.h>
+#include <ToydadInterface.h>
 
 
-ToydadInteface dev;
+ToydadInterface dev;
 
 void setup()
 {
