@@ -28,6 +28,9 @@ extern const modular_server::FirmwareInfo firmware_info;
 
 enum{REQUEST_SIZE_MAX=20};
 enum{RESPONSE_SIZE_MAX=3000};
+enum{KEY_SIZE=3};
+
+extern const char line_beginning;
 
 // Interrupts
 

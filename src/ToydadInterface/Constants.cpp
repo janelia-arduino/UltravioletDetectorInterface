@@ -24,6 +24,8 @@ const modular_server::FirmwareInfo firmware_info =
   .version_patch=0,
 };
 
+const char line_beginning = '#';
+
 // Interrupts
 
 // Units

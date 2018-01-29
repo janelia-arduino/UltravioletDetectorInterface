@@ -38,6 +38,8 @@ public:
   ToydadInterface();
   virtual void setup();
 
+  bool getDetectorName(char detector_name[]);
+
 private:
   modular_server::Property properties_[toydad_interface::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[toydad_interface::constants::PARAMETER_COUNT_MAX];
@@ -45,6 +47,10 @@ private:
   modular_server::Callback callbacks_[toydad_interface::constants::CALLBACK_COUNT_MAX];
 
   char response_[toydad_interface::constants::RESPONSE_SIZE_MAX];
+
+  bool sendCommandGetResponse(const char key[]);
+  size_t getResponseLength();
+  bool getResponseKey(char key[]);
 
   // Handlers
   void getDetectorInfoHandler();

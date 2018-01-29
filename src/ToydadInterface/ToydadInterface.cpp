@@ -61,6 +61,33 @@ void ToydadInterface::setup()
   // Callbacks
 }
 
+bool ToydadInterface::getDetectorName(char detector_name[])
+{
+  const char key[constants::KEY_SIZE + 1] = "Dtr";
+  sendCommandGetResponse(key);
+}
+
+bool ToydadInterface::sendCommandGetResponse(const char key[])
+{
+  const char data[constants::REQUEST_SIZE_MAX] = "";
+  strcat(data,constants::line_beginning);
+  strcat(data,key);
+  writeRead(data,response_,constants::RESPONSE_SIZE_MAX);
+}
+
+size_t ToydadInterface::getResponseLength()
+{
+  return strlen(response_);
+}
+
+bool ToydadInterface::getResponseKey(char key[])
+{
+  if (getResponseLength() >= constants::KEY_SIZE)
+  {
+    key = response_;
+  }
+}
+
 // Handlers must be non-blocking (avoid 'delay')
 //
 // modular_server_.parameter(parameter_name).getValue(value) value type must be either:
@@ -80,9 +107,6 @@ void ToydadInterface::setup()
 
 void ToydadInterface::getDetectorInfoHandler()
 {
-  const char request[constants::REQUEST_SIZE_MAX] = "#DTr";
-  writeRead(request,response_,constants::RESPONSE_SIZE_MAX);
-
   modular_server_.response().writeResultKey();
 
   modular_server_.response().beginObject();
