@@ -61,6 +61,10 @@ void ToydadInterface::setup()
   get_detector_info_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::getDetectorInfoHandler));
   get_detector_info_function.setResultTypeObject();
 
+  modular_server::Function & get_status_function = modular_server_.createFunction(constants::get_status_function_name);
+  get_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::getStatusHandler));
+  get_status_function.setResultTypeString();
+
   // Callbacks
 }
 
@@ -110,6 +114,21 @@ bool ToydadInterface::getSerialNumber(char * & serial_number)
   return success;
 }
 
+bool ToydadInterface::getStatus(Status & status)
+{
+  const char key[] = "STr";
+  bool success = sendCommandGetResponse(key);
+  if (!success)
+  {
+    return success;
+  }
+  char status_str[constants::STATUS_BUFFER_SIZE];
+  memset(status_str,0,constants::STATUS_BUFFER_SIZE);
+  strncpy(status_str,(response_data_ + constants::STATUS_OFFSET),constants::STATUS_SIZE);
+  status = static_cast<Status>(atoi(response_data_));
+  return success;
+}
+
 bool ToydadInterface::sendCommandGetResponse(const char key[])
 {
   initializeResponse();
@@ -119,11 +138,12 @@ bool ToydadInterface::sendCommandGetResponse(const char key[])
   strcat(data,key);
   writeRead(data,response_,constants::RESPONSE_SIZE_MAX);
   strncpy(response_key_,response_,constants::KEY_SIZE);
+  bool success = false;
   if (strcmp(key,response_key_) == 0)
   {
-    return true;
+    success = true;
   }
-  return false;
+  return success;
 }
 
 size_t ToydadInterface::getResponseLength()
@@ -181,6 +201,73 @@ void ToydadInterface::getDetectorInfoHandler()
 
   getSerialNumber(response_data);
   modular_server_.response().write(constants::serial_number_constant_string,response_data);
+
+  modular_server_.response().endObject();
+}
+
+void ToydadInterface::getStatusHandler()
+{
+  if (!communicating())
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+  modular_server_.response().writeResultKey();
+
+  modular_server_.response().beginObject();
+
+  Status status;
+  getStatus(status);
+  ConstantString * status_ptr = NULL;
+  switch (status)
+  {
+    case STANDBY:
+    {
+      status_ptr = &constants::status_standby_constant_string;
+      break;
+    }
+    case LAMP_IGNITION:
+    {
+      status_ptr = &constants::status_lamp_ignition_constant_string;
+      break;
+    }
+    case MEASUREMENT:
+    {
+      status_ptr = &constants::status_measurement_constant_string;
+      break;
+    }
+    case AUTOZERO:
+    {
+      status_ptr = &constants::status_autozero_constant_string;
+      break;
+    }
+    case SCAN_ABS:
+    {
+      status_ptr = &constants::status_scan_abs_constant_string;
+      break;
+    }
+    case SCAN_ITS:
+    {
+      status_ptr = &constants::status_scan_its_constant_string;
+      break;
+    }
+    case USER_CALIB:
+    {
+      status_ptr = &constants::status_user_calib_constant_string;
+      break;
+    }
+    case SELF_TEST:
+    {
+      status_ptr = &constants::status_self_test_constant_string;
+      break;
+    }
+    case SCAN_ABS_SUBS:
+    {
+      status_ptr = &constants::status_scan_abs_subs_constant_string;
+      break;
+    }
+  }
+  modular_server_.response().write(constants::status_constant_string,status_ptr);
 
   modular_server_.response().endObject();
 }

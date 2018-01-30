@@ -18,7 +18,7 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=1};
+enum{FUNCTION_COUNT_MAX=2};
 enum{CALLBACK_COUNT_MAX=1};
 
 extern ConstantString device_name;
@@ -30,6 +30,11 @@ enum{REQUEST_SIZE_MAX=20};
 enum{RESPONSE_SIZE_MAX=3000};
 enum{KEY_SIZE=3};
 enum{KEY_BUFFER_SIZE=4};
+enum{STATUS_SIZE=2};
+enum{STATUS_BUFFER_SIZE=3};
+enum{STATUS_OFFSET=0};
+enum{ERROR_SIZE=2};
+enum{ERROR_BUFFER_SIZE=3};
 
 extern const char * line_beginning;
 
@@ -38,6 +43,17 @@ extern ConstantString hardware_version_constant_string;
 extern ConstantString model_constant_string;
 extern ConstantString firmware_version_constant_string;
 extern ConstantString serial_number_constant_string;
+
+extern ConstantString status_constant_string;
+extern ConstantString status_standby_constant_string;
+extern ConstantString status_lamp_ignition_constant_string;
+extern ConstantString status_measurement_constant_string;
+extern ConstantString status_autozero_constant_string;
+extern ConstantString status_scan_abs_constant_string;
+extern ConstantString status_scan_its_constant_string;
+extern ConstantString status_user_calib_constant_string;
+extern ConstantString status_self_test_constant_string;
+extern ConstantString status_scan_abs_subs_constant_string;
 
 // Interrupts
 
@@ -63,6 +79,7 @@ extern const long timeout_default;
 
 // Functions
 extern ConstantString get_detector_info_function_name;
+extern ConstantString get_status_function_name;
 
 // Callbacks
 

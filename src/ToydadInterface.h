@@ -46,6 +46,20 @@ public:
   bool getFirmwareVersion(char * & firmware_version);
   bool getSerialNumber(char * & serial_number);
 
+  enum Status
+  {
+    STANDBY = 0,
+    LAMP_IGNITION = 1,
+    MEASUREMENT = 2,
+    AUTOZERO = 3,
+    SCAN_ABS = 4,
+    SCAN_ITS = 5,
+    USER_CALIB = 6,
+    SELF_TEST = 7,
+    SCAN_ABS_SUBS = 9,
+  };
+  bool getStatus(Status & status);
+
 private:
   modular_server::Property properties_[toydad_interface::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[toydad_interface::constants::PARAMETER_COUNT_MAX];
@@ -62,6 +76,7 @@ private:
 
   // Handlers
   void getDetectorInfoHandler();
+  void getStatusHandler();
 
 };
 

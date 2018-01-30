@@ -32,6 +32,17 @@ CONSTANT_STRING(model_constant_string,"model");
 CONSTANT_STRING(firmware_version_constant_string,"firmware_version");
 CONSTANT_STRING(serial_number_constant_string,"serial_number");
 
+CONSTANT_STRING(status_constant_string,"status");
+CONSTANT_STRING(status_standby_constant_string,"STANDBY");
+CONSTANT_STRING(status_lamp_ignition_constant_string,"LAMP_IGNITION");
+CONSTANT_STRING(status_measurement_constant_string,"MEASUREMENT");
+CONSTANT_STRING(status_autozero_constant_string,"AUTOZERO");
+CONSTANT_STRING(status_scan_abs_constant_string,"SCAN_ABS");
+CONSTANT_STRING(status_scan_its_constant_string,"SCAN_ITS");
+CONSTANT_STRING(status_user_calib_constant_string,"USER_CALIB");
+CONSTANT_STRING(status_self_test_constant_string,"SELF_TEST");
+CONSTANT_STRING(status_scan_abs_subs_constant_string,"SCAN_ABS_SUBS");
+
 // Interrupts
 
 // Units
@@ -62,6 +73,7 @@ const long timeout_default = 100;
 
 // Functions
 CONSTANT_STRING(get_detector_info_function_name,"getDetectorInfo");
+CONSTANT_STRING(get_status_function_name,"getStatus");
 
 // Callbacks
 
