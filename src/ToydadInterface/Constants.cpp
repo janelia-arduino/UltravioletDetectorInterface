@@ -56,6 +56,8 @@ modular_server::SubsetMemberType line_ending_ptr_subset[LINE_ENDING_SUBSET_LENGT
 };
 const ConstantString * const line_ending_ptr_default = &serial_interface::constants::line_ending_lf;
 
+const long timeout_default = 100;
+
 // Parameters
 
 // Functions
@@ -64,5 +66,6 @@ CONSTANT_STRING(get_detector_info_function_name,"getDetectorInfo");
 // Callbacks
 
 // Errors
+CONSTANT_STRING(not_communicating_error,"The detector is not communicating. Check power and connections.");
 }
 }

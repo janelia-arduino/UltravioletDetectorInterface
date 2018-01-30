@@ -38,6 +38,8 @@ public:
   ToydadInterface();
   virtual void setup();
 
+  bool communicating();
+
   bool getDetectorName(char * & detector_name);
   bool getHardwareVersion(char * & hardware_version);
   bool getModel(char * & model);

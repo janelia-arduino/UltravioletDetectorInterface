@@ -57,6 +57,8 @@ enum{LINE_ENDING_SUBSET_LENGTH=1};
 extern modular_server::SubsetMemberType line_ending_ptr_subset[LINE_ENDING_SUBSET_LENGTH];
 extern const ConstantString * const line_ending_ptr_default;
 
+extern const long timeout_default;
+
 // Parameters
 
 // Functions
@@ -65,6 +67,7 @@ extern ConstantString get_detector_info_function_name;
 // Callbacks
 
 // Errors
+extern ConstantString not_communicating_error;
 }
 }
 #include "5x3.h"

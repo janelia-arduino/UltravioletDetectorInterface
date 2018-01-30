@@ -28,6 +28,8 @@ extern const ConstantString * const formats_default[serial_interface::constants:
 
 extern const ConstantString * const line_endings_default[serial_interface::constants::SERIAL_STREAM_COUNT];
 
+extern const long timeouts_default[serial_interface::constants::SERIAL_STREAM_COUNT];
+
 // Parameters
 
 // Functions

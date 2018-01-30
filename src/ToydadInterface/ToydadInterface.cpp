@@ -51,6 +51,9 @@ void ToydadInterface::setup()
   line_endings_property.setDefaultValue(constants::line_endings_default);
   line_endings_property.setSubset(constants::line_ending_ptr_subset);
 
+  modular_server::Property & timeouts_property = modular_server_.property(serial_interface::constants::timeouts_property_name);
+  timeouts_property.setDefaultValue(constants::timeouts_default);
+
   // Parameters
 
   // Functions
@@ -59,6 +62,12 @@ void ToydadInterface::setup()
   get_detector_info_function.setResultTypeObject();
 
   // Callbacks
+}
+
+bool ToydadInterface::communicating()
+{
+  char * detector_name = NULL;
+  return getDetectorName(detector_name);
 }
 
 bool ToydadInterface::getDetectorName(char * & detector_name)
@@ -147,6 +156,11 @@ void ToydadInterface::initializeResponse()
 
 void ToydadInterface::getDetectorInfoHandler()
 {
+  if (!communicating())
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
   modular_server_.response().writeResultKey();
 
   modular_server_.response().beginObject();

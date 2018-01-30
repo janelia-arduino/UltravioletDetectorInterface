@@ -34,6 +34,11 @@ const ConstantString * const line_endings_default[serial_interface::constants::S
   line_ending_ptr_default,
 };
 
+const long timeouts_default[serial_interface::constants::SERIAL_STREAM_COUNT] =
+{
+  timeout_default,
+};
+
 // Parameters
 
 // Functions
