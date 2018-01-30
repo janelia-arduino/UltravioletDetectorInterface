@@ -29,8 +29,15 @@ extern const modular_server::FirmwareInfo firmware_info;
 enum{REQUEST_SIZE_MAX=20};
 enum{RESPONSE_SIZE_MAX=3000};
 enum{KEY_SIZE=3};
+enum{KEY_BUFFER_SIZE=4};
 
-extern const char line_beginning;
+extern const char * line_beginning;
+
+extern ConstantString detector_name_constant_string;
+extern ConstantString hardware_version_constant_string;
+extern ConstantString model_constant_string;
+extern ConstantString firmware_version_constant_string;
+extern ConstantString serial_number_constant_string;
 
 // Interrupts
 

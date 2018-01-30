@@ -24,7 +24,13 @@ const modular_server::FirmwareInfo firmware_info =
   .version_patch=0,
 };
 
-const char line_beginning = '#';
+const char * line_beginning = "#";
+
+CONSTANT_STRING(detector_name_constant_string,"detector_name");
+CONSTANT_STRING(hardware_version_constant_string,"hardware_version");
+CONSTANT_STRING(model_constant_string,"model");
+CONSTANT_STRING(firmware_version_constant_string,"firmware_version");
+CONSTANT_STRING(serial_number_constant_string,"serial_number");
 
 // Interrupts
 

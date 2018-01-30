@@ -61,18 +61,60 @@ void ToydadInterface::setup()
   // Callbacks
 }
 
-bool ToydadInterface::getDetectorName(char detector_name[])
+bool ToydadInterface::getDetectorName(char * & detector_name)
 {
-  const char key[constants::KEY_SIZE + 1] = "Dtr";
-  sendCommandGetResponse(key);
+  detector_name = response_data_;
+  const char key[] = "DTr";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::getHardwareVersion(char * & hardware_version)
+{
+  hardware_version = response_data_;
+  const char key[] = "HWr";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::getModel(char * & model)
+{
+  model = response_data_;
+  const char key[] = "MDr";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::getFirmwareVersion(char * & firmware_version)
+{
+  firmware_version = response_data_;
+  const char key[] = "SWr";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::getSerialNumber(char * & serial_number)
+{
+  serial_number = response_data_;
+  const char key[] = "SNr";
+  bool success = sendCommandGetResponse(key);
+  return success;
 }
 
 bool ToydadInterface::sendCommandGetResponse(const char key[])
 {
-  const char data[constants::REQUEST_SIZE_MAX] = "";
+  initializeResponse();
+  char data[constants::REQUEST_SIZE_MAX];
+  data[0] = '\0';
   strcat(data,constants::line_beginning);
   strcat(data,key);
   writeRead(data,response_,constants::RESPONSE_SIZE_MAX);
+  strncpy(response_key_,response_,constants::KEY_SIZE);
+  if (strcmp(key,response_key_) == 0)
+  {
+    return true;
+  }
+  return false;
 }
 
 size_t ToydadInterface::getResponseLength()
@@ -80,12 +122,10 @@ size_t ToydadInterface::getResponseLength()
   return strlen(response_);
 }
 
-bool ToydadInterface::getResponseKey(char key[])
+void ToydadInterface::initializeResponse()
 {
-  if (getResponseLength() >= constants::KEY_SIZE)
-  {
-    key = response_;
-  }
+  memset(response_key_,0,constants::KEY_BUFFER_SIZE);
+  response_data_[0] = '\0';
 }
 
 // Handlers must be non-blocking (avoid 'delay')
@@ -111,7 +151,22 @@ void ToydadInterface::getDetectorInfoHandler()
 
   modular_server_.response().beginObject();
 
-  modular_server_.response().write("detector_name",response_);
+  char * response_data = NULL;
+
+  getDetectorName(response_data);
+  modular_server_.response().write(constants::detector_name_constant_string,response_data);
+
+  getHardwareVersion(response_data);
+  modular_server_.response().write(constants::hardware_version_constant_string,response_data);
+
+  getModel(response_data);
+  modular_server_.response().write(constants::model_constant_string,response_data);
+
+  getFirmwareVersion(response_data);
+  modular_server_.response().write(constants::firmware_version_constant_string,response_data);
+
+  getSerialNumber(response_data);
+  modular_server_.response().write(constants::serial_number_constant_string,response_data);
 
   modular_server_.response().endObject();
 }
