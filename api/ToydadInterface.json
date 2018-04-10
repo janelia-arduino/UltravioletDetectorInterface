@@ -1,0 +1,23 @@
+{
+  "id": "getApi",
+  "result": {
+    "firmware": [
+      "ToydadInterface"
+    ],
+    "verbosity": "GENERAL",
+    "functions": [
+      {
+        "name": "getDetectorInfo",
+        "result_info": {
+          "type": "object"
+        }
+      },
+      {
+        "name": "getStatus",
+        "result_info": {
+          "type": "string"
+        }
+      }
+    ]
+  }
+}

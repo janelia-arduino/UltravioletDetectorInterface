@@ -2,11 +2,11 @@
 
 Authors:
 
-    Peter Polidoro <polidorop@janelia.hhmi.org>
+Peter Polidoro <polidorop@janelia.hhmi.org>
 
 License:
 
-    BSD
+BSD
 
 ## Ancestors
 
@@ -27,6 +27,19 @@ License:
 ## API NAMES
 
 ```json
+{
+  "id": "getApi",
+  "result": {
+    "firmware": [
+      "ToydadInterface"
+    ],
+    "verbosity": "NAMES",
+    "functions": [
+      "getDetectorInfo",
+      "getStatus"
+    ]
+  }
+}
 ```
 
 ## API GENERAL
