@@ -43,7 +43,7 @@ CONSTANT_STRING(status_user_calib_constant_string,"USER_CALIB");
 CONSTANT_STRING(status_self_test_constant_string,"SELF_TEST");
 CONSTANT_STRING(status_scan_abs_subs_constant_string,"SCAN_ABS_SUBS");
 
-// Interrupts
+// Pins
 
 // Units
 

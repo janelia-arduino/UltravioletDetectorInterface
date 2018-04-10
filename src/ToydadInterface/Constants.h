@@ -55,7 +55,7 @@ extern ConstantString status_user_calib_constant_string;
 extern ConstantString status_self_test_constant_string;
 extern ConstantString status_scan_abs_subs_constant_string;
 
-// Interrupts
+// Pins
 
 // Units
 

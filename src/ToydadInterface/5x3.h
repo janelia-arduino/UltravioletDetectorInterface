@@ -16,7 +16,7 @@ namespace toydad_interface
 {
 namespace constants
 {
-// Interrupts
+// Pins
 
 // Units
 
