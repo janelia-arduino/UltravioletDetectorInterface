@@ -1,0 +1,53 @@
+#+TITLE: ToydadInterface
+#+AUTHOR: Peter Polidoro
+#+EMAIL: peterpolidoro@gmail.com
+
+* Library Information
+  - Author :: Peter Polidoro
+  - License :: BSD
+
+* Ancestors
+
+  [[https://github.com/janelia-arduino/ModularServer][ModularServer]]
+
+  [[https://github.com/janelia-arduino/ModularDeviceBase][ModularDeviceBase]]
+
+  [[https://github.com/janelia-arduino/SerialInterface][SerialInterface]]
+
+* Clients
+
+* Devices
+
+  [[https://github.com/janelia-modular-devices/modular_device_base.git][modular_device_base]]
+
+  [[https://github.com/janelia-modular-devices/rs232_interface.git][rs232_interface]]
+
+* API NAMES
+
+  #+BEGIN_SRC js
+{
+  "id": "getApi",
+  "result": {
+    "firmware": [
+      "ToydadInterface"
+    ],
+    "verbosity": "NAMES",
+    "functions": [
+      "getDetectorInfo",
+      "getStatus"
+    ]
+  }
+}
+  #+END_SRC
+
+* API GENERAL
+
+  [[./api/][API GENERAL]]
+
+* More Detailed Modular Device Information
+
+  [[https://github.com/janelia-modular-devices/modular-devices][modular-devices]]
+
+* Library Dependencies
+
+  [[https://github.com/janelia-arduino/arduino-libraries][arduino-libraries]]
