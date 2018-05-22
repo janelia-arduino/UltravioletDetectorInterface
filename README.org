@@ -3,51 +3,59 @@
 #+EMAIL: peterpolidoro@gmail.com
 
 * Library Information
-  - Author :: Peter Polidoro
+  - Name :: ToydadInterface
+  - Version :: 1.0.0
   - License :: BSD
+  - URL :: https://github.com/janelia-arduino/ToydadInterface
+  - Author :: Peter Polidoro
+  - Email :: peterpolidoro@gmail.com
+
+** Description
+
+   Modular device Toydad interface library for ECOM UV detectors.
+
+* API NAMES
+
+  #+BEGIN_SRC js
+    {
+      "id": "getApi",
+      "result": {
+        "firmware": [
+          "ToydadInterface"
+        ],
+        "verbosity": "NAMES",
+        "functions": [
+          "getDetectorInfo",
+          "getStatus"
+        ]
+      }
+    }
+  #+END_SRC
+
+* API GENERAL
+
+  [[./api/]]
 
 * Ancestors
 
-  [[https://github.com/janelia-arduino/ModularServer][ModularServer]]
+  [[https://github.com/janelia-arduino/ModularServer]]
 
-  [[https://github.com/janelia-arduino/ModularDeviceBase][ModularDeviceBase]]
+  [[https://github.com/janelia-arduino/ModularDeviceBase]]
 
-  [[https://github.com/janelia-arduino/SerialInterface][SerialInterface]]
+  [[https://github.com/janelia-arduino/SerialInterface]]
 
 * Clients
 
 * Devices
 
-  [[https://github.com/janelia-modular-devices/modular_device_base.git][modular_device_base]]
+  [[https://github.com/janelia-modular-devices/modular_device_base.git]]
 
-  [[https://github.com/janelia-modular-devices/rs232_interface.git][rs232_interface]]
-
-* API NAMES
-
-  #+BEGIN_SRC js
-{
-  "id": "getApi",
-  "result": {
-    "firmware": [
-      "ToydadInterface"
-    ],
-    "verbosity": "NAMES",
-    "functions": [
-      "getDetectorInfo",
-      "getStatus"
-    ]
-  }
-}
-  #+END_SRC
-
-* API GENERAL
-
-  [[./api/][API GENERAL]]
+  [[https://github.com/janelia-modular-devices/rs232_interface.git]]
 
 * More Detailed Modular Device Information
 
-  [[https://github.com/janelia-modular-devices/modular-devices][modular-devices]]
+  [[https://github.com/janelia-modular-devices/modular-devices]]
 
-* Library Dependencies
+* Installation Instructions
 
-  [[https://github.com/janelia-arduino/arduino-libraries][arduino-libraries]]
+  [[https://github.com/janelia-arduino/arduino-libraries]]
