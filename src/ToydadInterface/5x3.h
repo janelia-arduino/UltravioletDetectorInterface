@@ -3,7 +3,7 @@
 //
 //
 // Authors:
-// Peter Polidoro polidorop@janelia.hhmi.org
+// Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
 #ifndef TOYDAD_INTERFACE_5X3_CONSTANTS_H
 #define TOYDAD_INTERFACE_5X3_CONSTANTS_H
