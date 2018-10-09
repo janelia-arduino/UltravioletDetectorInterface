@@ -48,9 +48,9 @@
 
 * Devices
 
-  [[https://github.com/janelia-modular-devices/modular_device_base.git]]
+  [[https://github.com/janelia-modular-devices/modular_device_base]]
 
-  [[https://github.com/janelia-modular-devices/rs232_interface.git]]
+  [[https://github.com/janelia-modular-devices/rs232_interface]]
 
 * More Detailed Modular Device Information
 
