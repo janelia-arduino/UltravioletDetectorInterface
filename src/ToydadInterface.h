@@ -49,23 +49,39 @@ public:
   };
   bool getStatus(Status & status);
 
+  bool lampIsOn();
+  bool turnLampOn();
+  bool turnLampOff();
+
+  bool playShortTone();
+  bool playMediumTone();
+  bool playLongTone();
+
 private:
   modular_server::Property properties_[toydad_interface::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[toydad_interface::constants::PARAMETER_COUNT_MAX];
   modular_server::Function functions_[toydad_interface::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[toydad_interface::constants::CALLBACK_COUNT_MAX];
 
+  char request_[toydad_interface::constants::REQUEST_SIZE_MAX];
+  char request_key_[toydad_interface::constants::KEY_BUFFER_SIZE];
   char response_[toydad_interface::constants::RESPONSE_SIZE_MAX];
   char response_key_[toydad_interface::constants::KEY_BUFFER_SIZE];
   char * const response_data_ = response_ + toydad_interface::constants::KEY_SIZE;
 
-  bool sendCommandGetResponse(const char key[]);
+  bool sendCommandGetResponse(const char command[]);
   size_t getResponseLength();
-  void initializeResponse();
+  void initializeRequestAndResponse();
 
   // Handlers
   void getDetectorInfoHandler();
   void getStatusHandler();
+  void lampIsOnHandler();
+  void turnLampOnHandler();
+  void turnLampOffHandler();
+  void playShortToneHandler();
+  void playMediumToneHandler();
+  void playLongToneHandler();
 
 };
 

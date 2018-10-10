@@ -18,7 +18,7 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=2};
+enum{FUNCTION_COUNT_MAX=8};
 enum{CALLBACK_COUNT_MAX=1};
 
 extern ConstantString device_name;
@@ -80,6 +80,12 @@ extern const long timeout_default;
 // Functions
 extern ConstantString get_detector_info_function_name;
 extern ConstantString get_status_function_name;
+extern ConstantString lamp_is_on_function_name;
+extern ConstantString turn_lamp_on_function_name;
+extern ConstantString turn_lamp_off_function_name;
+extern ConstantString play_short_tone_function_name;
+extern ConstantString play_medium_tone_function_name;
+extern ConstantString play_long_tone_function_name;
 
 // Callbacks
 

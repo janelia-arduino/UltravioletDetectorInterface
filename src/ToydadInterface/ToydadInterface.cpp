@@ -65,6 +65,25 @@ void ToydadInterface::setup()
   get_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::getStatusHandler));
   get_status_function.setResultTypeString();
 
+  modular_server::Function & lamp_is_on_function = modular_server_.createFunction(constants::lamp_is_on_function_name);
+  lamp_is_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::lampIsOnHandler));
+  lamp_is_on_function.setResultTypeBool();
+
+  modular_server::Function & turn_lamp_on_function = modular_server_.createFunction(constants::turn_lamp_on_function_name);
+  turn_lamp_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::turnLampOnHandler));
+
+  modular_server::Function & turn_lamp_off_function = modular_server_.createFunction(constants::turn_lamp_off_function_name);
+  turn_lamp_off_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::turnLampOffHandler));
+
+  modular_server::Function & play_short_tone_function = modular_server_.createFunction(constants::play_short_tone_function_name);
+  play_short_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::playShortToneHandler));
+
+  modular_server::Function & play_medium_tone_function = modular_server_.createFunction(constants::play_medium_tone_function_name);
+  play_medium_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::playMediumToneHandler));
+
+  modular_server::Function & play_long_tone_function = modular_server_.createFunction(constants::play_long_tone_function_name);
+  play_long_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::playLongToneHandler));
+
   // Callbacks
 }
 
@@ -125,21 +144,73 @@ bool ToydadInterface::getStatus(Status & status)
   char status_str[constants::STATUS_BUFFER_SIZE];
   memset(status_str,0,constants::STATUS_BUFFER_SIZE);
   strncpy(status_str,(response_data_ + constants::STATUS_OFFSET),constants::STATUS_SIZE);
-  status = static_cast<Status>(atoi(response_data_));
+  status = static_cast<Status>(atoi(status_str));
   return success;
 }
 
-bool ToydadInterface::sendCommandGetResponse(const char key[])
+bool ToydadInterface::lampIsOn()
 {
-  initializeResponse();
-  char data[constants::REQUEST_SIZE_MAX];
-  data[0] = '\0';
-  strcat(data,constants::line_beginning);
-  strcat(data,key);
-  writeRead(data,response_,constants::RESPONSE_SIZE_MAX);
+  const char key[] = "LPr";
+  bool success = sendCommandGetResponse(key);
+  if (!success)
+  {
+    return success;
+  }
+  bool lamp_is_on = (strcmp("T",response_data_) == 0);
+  return lamp_is_on;
+}
+
+bool ToydadInterface::turnLampOn()
+{
+  const char key[] = "LPwT";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::turnLampOff()
+{
+  const char key[] = "LPwF";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::playShortTone()
+{
+  const char key[] = "SGw1";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::playMediumTone()
+{
+  const char key[] = "SGw2";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::playLongTone()
+{
+  const char key[] = "SGw3";
+  bool success = sendCommandGetResponse(key);
+  return success;
+}
+
+bool ToydadInterface::sendCommandGetResponse(const char command[])
+{
+  initializeRequestAndResponse();
+  strcat(request_,constants::line_beginning);
+  strcat(request_,command);
+  writeRead(request_,response_,constants::RESPONSE_SIZE_MAX);
+  strncpy(request_key_,command,constants::KEY_SIZE);
   strncpy(response_key_,response_,constants::KEY_SIZE);
+  // Serial << "command = " << command << "\n";
+  // Serial << "request_ = " << request_ << "\n";
+  // Serial << "request_key_ = " << request_key_ << "\n";
+  // Serial << "response_ = " << response_ << "\n";
+  // Serial << "response_key_ = " << response_key_ << "\n";
+  // Serial << "response_data_ = " << response_data_ << "\n";
   bool success = false;
-  if (strcmp(key,response_key_) == 0)
+  if (strcmp(request_key_,response_key_) == 0)
   {
     success = true;
   }
@@ -151,9 +222,12 @@ size_t ToydadInterface::getResponseLength()
   return strlen(response_);
 }
 
-void ToydadInterface::initializeResponse()
+void ToydadInterface::initializeRequestAndResponse()
 {
-  memset(response_key_,0,constants::KEY_BUFFER_SIZE);
+  request_[0] = '\0';
+  request_key_[0] = '\0';
+  response_[0] = '\0';
+  response_key_[0] = '\0';
   response_data_[0] = '\0';
 }
 
@@ -208,17 +282,18 @@ void ToydadInterface::getDetectorInfoHandler()
 
 void ToydadInterface::getStatusHandler()
 {
-  if (!communicating())
+  Status status;
+  bool success = getStatus(status);
+  if (!success)
   {
     modular_server_.response().returnError(constants::not_communicating_error);
     return;
   }
+
   modular_server_.response().writeResultKey();
 
   modular_server_.response().beginObject();
 
-  Status status;
-  getStatus(status);
   ConstantString * status_ptr = NULL;
   switch (status)
   {
@@ -271,4 +346,65 @@ void ToydadInterface::getStatusHandler()
   modular_server_.response().write(constants::status_constant_string,status_ptr);
 
   modular_server_.response().endObject();
+}
+
+void ToydadInterface::lampIsOnHandler()
+{
+  if (!communicating())
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+  bool lamp_is_on = lampIsOn();
+  modular_server_.response().returnResult(lamp_is_on);
+}
+
+void ToydadInterface::turnLampOnHandler()
+{
+  bool success = turnLampOn();
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+}
+
+void ToydadInterface::turnLampOffHandler()
+{
+  bool success = turnLampOff();
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+}
+
+void ToydadInterface::playShortToneHandler()
+{
+  bool success = playShortTone();
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+}
+
+void ToydadInterface::playMediumToneHandler()
+{
+  bool success = playMediumTone();
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+}
+
+void ToydadInterface::playLongToneHandler()
+{
+  bool success = playLongTone();
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
 }
