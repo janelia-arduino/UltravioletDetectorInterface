@@ -59,6 +59,10 @@ public:
 
   typedef Array<size_t,ultraviolet_detector_interface::constants::CHANNEL_COUNT_MAX> WavelengthArray;
 
+  bool getWavelengthRange(WavelengthArray & range);
+  bool getChannelWavelengths(WavelengthArray & channel_wavelengths);
+  bool setChannelWavelengths(const WavelengthArray & channel_wavelengths);
+
 private:
   modular_server::Property properties_[ultraviolet_detector_interface::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[ultraviolet_detector_interface::constants::PARAMETER_COUNT_MAX];
@@ -84,6 +88,9 @@ private:
   void playShortToneHandler();
   void playMediumToneHandler();
   void playLongToneHandler();
+  void getWavelengthRangeHandler();
+  void getChannelWavelengthsHandler();
+  void setChannelWavelengthsHandler();
 
 };
 

@@ -70,6 +70,9 @@ const ConstantString * const line_ending_ptr_default = &serial_interface::consta
 const long timeout_default = 100;
 
 // Parameters
+const long wavelength_min = 200;
+const long wavelength_max = 800;
+CONSTANT_STRING(channel_wavelengths_parameter_name,"channel_wavelengths");
 
 // Functions
 CONSTANT_STRING(get_detector_info_function_name,"getDetectorInfo");
@@ -80,6 +83,9 @@ CONSTANT_STRING(turn_lamp_off_function_name,"turnLampOff");
 CONSTANT_STRING(play_short_tone_function_name,"playShortTone");
 CONSTANT_STRING(play_medium_tone_function_name,"playMediumTone");
 CONSTANT_STRING(play_long_tone_function_name,"playLongTone");
+CONSTANT_STRING(get_wavelength_range_function_name,"getWavelengthRange");
+CONSTANT_STRING(get_channel_wavelengths_function_name,"getChannelWavelengths");
+CONSTANT_STRING(set_channel_wavelengths_function_name,"setChannelWavelengths");
 
 // Callbacks
 

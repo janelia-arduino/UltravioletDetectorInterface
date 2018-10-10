@@ -55,6 +55,9 @@ void UltravioletDetectorInterface::setup()
   timeouts_property.setDefaultValue(constants::timeouts_default);
 
   // Parameters
+  modular_server::Parameter & channel_wavelengths_parameter = modular_server_.createParameter(constants::channel_wavelengths_parameter_name);
+  channel_wavelengths_parameter.setRange(constants::wavelength_min,constants::wavelength_max);
+  channel_wavelengths_parameter.setArrayLengthRange(constants::CHANNEL_COUNT_MAX,constants::CHANNEL_COUNT_MAX);
 
   // Functions
   modular_server::Function & get_detector_info_function = modular_server_.createFunction(constants::get_detector_info_function_name);
@@ -84,6 +87,20 @@ void UltravioletDetectorInterface::setup()
   modular_server::Function & play_long_tone_function = modular_server_.createFunction(constants::play_long_tone_function_name);
   play_long_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playLongToneHandler));
 
+  modular_server::Function & get_wavelength_range_function = modular_server_.createFunction(constants::get_wavelength_range_function_name);
+  get_wavelength_range_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::getWavelengthRangeHandler));
+  get_wavelength_range_function.setResultTypeLong();
+  get_wavelength_range_function.setResultTypeArray();
+
+  modular_server::Function & get_channel_wavelengths_function = modular_server_.createFunction(constants::get_channel_wavelengths_function_name);
+  get_channel_wavelengths_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::getChannelWavelengthsHandler));
+  get_channel_wavelengths_function.setResultTypeLong();
+  get_channel_wavelengths_function.setResultTypeArray();
+
+  modular_server::Function & set_channel_wavelengths_function = modular_server_.createFunction(constants::set_channel_wavelengths_function_name);
+  set_channel_wavelengths_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::setChannelWavelengthsHandler));
+  set_channel_wavelengths_function.addParameter(channel_wavelengths_parameter);
+
   // Callbacks
 }
 
@@ -96,47 +113,47 @@ bool UltravioletDetectorInterface::communicating()
 bool UltravioletDetectorInterface::getDetectorName(char * & detector_name)
 {
   detector_name = response_data_;
-  const char key[] = "DTr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "DTr";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::getHardwareVersion(char * & hardware_version)
 {
   hardware_version = response_data_;
-  const char key[] = "HWr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "HWr";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::getModel(char * & model)
 {
   model = response_data_;
-  const char key[] = "MDr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "MDr";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::getFirmwareVersion(char * & firmware_version)
 {
   firmware_version = response_data_;
-  const char key[] = "SWr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "SWr";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::getSerialNumber(char * & serial_number)
 {
   serial_number = response_data_;
-  const char key[] = "SNr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "SNr";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::getStatus(Status & status)
 {
-  const char key[] = "STr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "STr";
+  bool success = sendCommandGetResponse(command);
   if (!success)
   {
     return success;
@@ -150,8 +167,8 @@ bool UltravioletDetectorInterface::getStatus(Status & status)
 
 bool UltravioletDetectorInterface::lampIsOn()
 {
-  const char key[] = "LPr";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "LPr";
+  bool success = sendCommandGetResponse(command);
   if (!success)
   {
     return success;
@@ -162,36 +179,97 @@ bool UltravioletDetectorInterface::lampIsOn()
 
 bool UltravioletDetectorInterface::turnLampOn()
 {
-  const char key[] = "LPwT";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "LPwT";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::turnLampOff()
 {
-  const char key[] = "LPwF";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "LPwF";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::playShortTone()
 {
-  const char key[] = "SGw1";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "SGw1";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::playMediumTone()
 {
-  const char key[] = "SGw2";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "SGw2";
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
 bool UltravioletDetectorInterface::playLongTone()
 {
-  const char key[] = "SGw3";
-  bool success = sendCommandGetResponse(key);
+  const char command[] = "SGw3";
+  bool success = sendCommandGetResponse(command);
+  return success;
+}
+
+bool UltravioletDetectorInterface::getWavelengthRange(WavelengthArray & range)
+{
+  const char command[] = "WRr";
+  bool success = sendCommandGetResponse(command);
+  if (!success)
+  {
+    return success;
+  }
+  char wavelength_str[constants::WAVELENGTH_BUFFER_SIZE];
+  size_t wavelength;
+  size_t offset;
+  range.clear();
+  for (size_t range_index=0; range_index<constants::RANGE_SIZE; ++range_index)
+  {
+    memset(wavelength_str,0,constants::WAVELENGTH_BUFFER_SIZE);
+    offset = range_index * (constants::WAVELENGTH_SIZE + constants::WAVELENGTH_OFFSET) + constants::WAVELENGTH_OFFSET;
+    strncpy(wavelength_str,(response_data_ + offset),constants::WAVELENGTH_SIZE);
+    wavelength = atoi(wavelength_str);
+    range.push_back(wavelength);
+  }
+  return success;
+}
+
+bool UltravioletDetectorInterface::getChannelWavelengths(WavelengthArray & channel_wavelengths)
+{
+  const char command[] = "WLr";
+  bool success = sendCommandGetResponse(command);
+  if (!success)
+  {
+    return success;
+  }
+  char wavelength_str[constants::WAVELENGTH_BUFFER_SIZE];
+  size_t wavelength;
+  size_t offset;
+  channel_wavelengths.clear();
+  for (size_t channel=0; channel<constants::CHANNEL_COUNT_MAX; ++channel)
+  {
+    memset(wavelength_str,0,constants::WAVELENGTH_BUFFER_SIZE);
+    offset = channel * (constants::WAVELENGTH_SIZE + constants::WAVELENGTH_OFFSET) + constants::WAVELENGTH_OFFSET;
+    strncpy(wavelength_str,(response_data_ + offset),constants::WAVELENGTH_SIZE);
+    wavelength = atoi(wavelength_str);
+    channel_wavelengths.push_back(wavelength);
+  }
+  return success;
+}
+
+bool UltravioletDetectorInterface::setChannelWavelengths(const WavelengthArray & channel_wavelengths)
+{
+  char command[] = "WLwAnnnBnnnCnnnDnnn";
+  char wavelength_str[constants::WAVELENGTH_BUFFER_SIZE];
+  size_t offset;
+  for (size_t channel=0; channel<constants::CHANNEL_COUNT_MAX; ++channel)
+  {
+    sprintf(wavelength_str,"%03d",channel_wavelengths[channel]);
+    offset = constants::KEY_SIZE + channel * (constants::WAVELENGTH_SIZE + constants::WAVELENGTH_OFFSET) + constants::WAVELENGTH_OFFSET;
+    strncpy((command + offset),wavelength_str,constants::WAVELENGTH_SIZE);
+  }
+  bool success = sendCommandGetResponse(command);
   return success;
 }
 
@@ -402,6 +480,50 @@ void UltravioletDetectorInterface::playMediumToneHandler()
 void UltravioletDetectorInterface::playLongToneHandler()
 {
   bool success = playLongTone();
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+}
+
+void UltravioletDetectorInterface::getWavelengthRangeHandler()
+{
+  WavelengthArray range;
+  bool success = getWavelengthRange(range);
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+  modular_server_.response().returnResult(range);
+}
+
+void UltravioletDetectorInterface::getChannelWavelengthsHandler()
+{
+  WavelengthArray channel_wavelengths;
+  bool success = getChannelWavelengths(channel_wavelengths);
+  if (!success)
+  {
+    modular_server_.response().returnError(constants::not_communicating_error);
+    return;
+  }
+  modular_server_.response().returnResult(channel_wavelengths);
+}
+
+void UltravioletDetectorInterface::setChannelWavelengthsHandler()
+{
+  ArduinoJson::JsonArray * channel_wavelengths_ptr;
+  modular_server_.parameter(constants::channel_wavelengths_parameter_name).getValue(channel_wavelengths_ptr);
+
+  WavelengthArray channel_wavelengths;
+  for (ArduinoJson::JsonArray::iterator it=channel_wavelengths_ptr->begin();
+       it != channel_wavelengths_ptr->end();
+       ++it)
+  {
+    channel_wavelengths.push_back(*it);
+  }
+  bool success = setChannelWavelengths(channel_wavelengths);
   if (!success)
   {
     modular_server_.response().returnError(constants::not_communicating_error);

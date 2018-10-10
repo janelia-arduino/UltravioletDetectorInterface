@@ -18,8 +18,10 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=8};
+enum{FUNCTION_COUNT_MAX=11};
 enum{CALLBACK_COUNT_MAX=1};
+
+enum{CHANNEL_COUNT_MAX=4};
 
 extern ConstantString device_name;
 
@@ -33,8 +35,11 @@ enum{KEY_BUFFER_SIZE=4};
 enum{STATUS_SIZE=2};
 enum{STATUS_BUFFER_SIZE=3};
 enum{STATUS_OFFSET=0};
-enum{ERROR_SIZE=2};
 enum{ERROR_BUFFER_SIZE=3};
+enum{WAVELENGTH_SIZE=3};
+enum{WAVELENGTH_BUFFER_SIZE=4};
+enum{WAVELENGTH_OFFSET=1};
+enum{RANGE_SIZE=2};
 
 extern const char * line_beginning;
 
@@ -76,6 +81,9 @@ extern const ConstantString * const line_ending_ptr_default;
 extern const long timeout_default;
 
 // Parameters
+extern const long wavelength_min;
+extern const long wavelength_max;
+extern ConstantString channel_wavelengths_parameter_name;
 
 // Functions
 extern ConstantString get_detector_info_function_name;
@@ -86,6 +94,9 @@ extern ConstantString turn_lamp_off_function_name;
 extern ConstantString play_short_tone_function_name;
 extern ConstantString play_medium_tone_function_name;
 extern ConstantString play_long_tone_function_name;
+extern ConstantString get_wavelength_range_function_name;
+extern ConstantString get_channel_wavelengths_function_name;
+extern ConstantString set_channel_wavelengths_function_name;
 
 // Callbacks
 
