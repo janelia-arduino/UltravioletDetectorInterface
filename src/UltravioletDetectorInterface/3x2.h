@@ -5,14 +5,14 @@
 // Authors:
 // Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
-#ifndef TOYDAD_INTERFACE_3X2_CONSTANTS_H
-#define TOYDAD_INTERFACE_3X2_CONSTANTS_H
+#ifndef ULTRAVIOLET_DETECTOR_INTERFACE_3X2_CONSTANTS_H
+#define ULTRAVIOLET_DETECTOR_INTERFACE_3X2_CONSTANTS_H
 #include "Constants.h"
 
 
 #if defined(__MK20DX256__)
 
-namespace toydad_interface
+namespace ultraviolet_detector_interface
 {
 namespace constants
 {

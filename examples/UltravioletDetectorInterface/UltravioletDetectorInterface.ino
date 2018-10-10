@@ -1,7 +1,7 @@
-#include <ToydadInterface.h>
+#include <UltravioletDetectorInterface.h>
 
 
-ToydadInterface dev;
+UltravioletDetectorInterface dev;
 
 void setup()
 {

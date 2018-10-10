@@ -1,12 +1,12 @@
 // ----------------------------------------------------------------------------
-// ToydadInterface.h
+// UltravioletDetectorInterface.h
 //
 //
 // Authors:
 // Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
-#ifndef TOYDAD_INTERFACE_H
-#define TOYDAD_INTERFACE_H
+#ifndef ULTRAVIOLET_DETECTOR_INTERFACE_H
+#define ULTRAVIOLET_DETECTOR_INTERFACE_H
 #include <ArduinoJson.h>
 #include <JsonStream.h>
 #include <Array.h>
@@ -18,13 +18,13 @@
 #include <ModularDeviceBase.h>
 #include <SerialInterface.h>
 
-#include "ToydadInterface/Constants.h"
+#include "UltravioletDetectorInterface/Constants.h"
 
 
-class ToydadInterface : public SerialInterface
+class UltravioletDetectorInterface : public SerialInterface
 {
 public:
-  ToydadInterface();
+  UltravioletDetectorInterface();
   virtual void setup();
 
   bool communicating();
@@ -57,19 +57,19 @@ public:
   bool playMediumTone();
   bool playLongTone();
 
-  typedef Array<size_t,toydad_interface::constants::CHANNEL_COUNT_MAX> WavelengthArray;
+  typedef Array<size_t,ultraviolet_detector_interface::constants::CHANNEL_COUNT_MAX> WavelengthArray;
 
 private:
-  modular_server::Property properties_[toydad_interface::constants::PROPERTY_COUNT_MAX];
-  modular_server::Parameter parameters_[toydad_interface::constants::PARAMETER_COUNT_MAX];
-  modular_server::Function functions_[toydad_interface::constants::FUNCTION_COUNT_MAX];
-  modular_server::Callback callbacks_[toydad_interface::constants::CALLBACK_COUNT_MAX];
+  modular_server::Property properties_[ultraviolet_detector_interface::constants::PROPERTY_COUNT_MAX];
+  modular_server::Parameter parameters_[ultraviolet_detector_interface::constants::PARAMETER_COUNT_MAX];
+  modular_server::Function functions_[ultraviolet_detector_interface::constants::FUNCTION_COUNT_MAX];
+  modular_server::Callback callbacks_[ultraviolet_detector_interface::constants::CALLBACK_COUNT_MAX];
 
-  char request_[toydad_interface::constants::REQUEST_SIZE_MAX];
-  char request_key_[toydad_interface::constants::KEY_BUFFER_SIZE];
-  char response_[toydad_interface::constants::RESPONSE_SIZE_MAX];
-  char response_key_[toydad_interface::constants::KEY_BUFFER_SIZE];
-  char * const response_data_ = response_ + toydad_interface::constants::KEY_SIZE;
+  char request_[ultraviolet_detector_interface::constants::REQUEST_SIZE_MAX];
+  char request_key_[ultraviolet_detector_interface::constants::KEY_BUFFER_SIZE];
+  char response_[ultraviolet_detector_interface::constants::RESPONSE_SIZE_MAX];
+  char response_key_[ultraviolet_detector_interface::constants::KEY_BUFFER_SIZE];
+  char * const response_data_ = response_ + ultraviolet_detector_interface::constants::KEY_SIZE;
 
   bool sendCommandGetResponse(const char command[]);
   size_t getResponseLength();

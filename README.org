@@ -1,18 +1,18 @@
-#+TITLE: ToydadInterface
+#+TITLE: UltravioletDetectorInterface
 #+AUTHOR: Peter Polidoro
 #+EMAIL: peterpolidoro@gmail.com
 
 * Library Information
-  - Name :: ToydadInterface
+  - Name :: UltravioletDetectorInterface
   - Version :: 1.0.0
   - License :: BSD
-  - URL :: https://github.com/janelia-arduino/ToydadInterface
+  - URL :: https://github.com/janelia-arduino/UltravioletDetectorInterface
   - Author :: Peter Polidoro
   - Email :: peterpolidoro@gmail.com
 
 ** Description
 
-   Modular device Toydad interface library for ECOM UV detectors.
+   Modular device ultraviolet detector interface library for ECOM Toydad UV detectors.
 
 * API NAMES
 
@@ -21,7 +21,7 @@
       "id": "getApi",
       "result": {
         "firmware": [
-          "ToydadInterface"
+          "UltravioletDetectorInterface"
         ],
         "verbosity": "NAMES",
         "functions": [

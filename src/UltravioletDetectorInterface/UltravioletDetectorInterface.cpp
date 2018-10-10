@@ -1,20 +1,20 @@
 // ----------------------------------------------------------------------------
-// ToydadInterface.cpp
+// UltravioletDetectorInterface.cpp
 //
 //
 // Authors:
 // Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
-#include "../ToydadInterface.h"
+#include "../UltravioletDetectorInterface.h"
 
 
-using namespace toydad_interface;
+using namespace ultraviolet_detector_interface;
 
-ToydadInterface::ToydadInterface()
+UltravioletDetectorInterface::UltravioletDetectorInterface()
 {
 }
 
-void ToydadInterface::setup()
+void UltravioletDetectorInterface::setup()
 {
   // Parent Setup
   SerialInterface::setup();
@@ -58,42 +58,42 @@ void ToydadInterface::setup()
 
   // Functions
   modular_server::Function & get_detector_info_function = modular_server_.createFunction(constants::get_detector_info_function_name);
-  get_detector_info_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::getDetectorInfoHandler));
+  get_detector_info_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::getDetectorInfoHandler));
   get_detector_info_function.setResultTypeObject();
 
   modular_server::Function & get_status_function = modular_server_.createFunction(constants::get_status_function_name);
-  get_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::getStatusHandler));
+  get_status_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::getStatusHandler));
   get_status_function.setResultTypeString();
 
   modular_server::Function & lamp_is_on_function = modular_server_.createFunction(constants::lamp_is_on_function_name);
-  lamp_is_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::lampIsOnHandler));
+  lamp_is_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::lampIsOnHandler));
   lamp_is_on_function.setResultTypeBool();
 
   modular_server::Function & turn_lamp_on_function = modular_server_.createFunction(constants::turn_lamp_on_function_name);
-  turn_lamp_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::turnLampOnHandler));
+  turn_lamp_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::turnLampOnHandler));
 
   modular_server::Function & turn_lamp_off_function = modular_server_.createFunction(constants::turn_lamp_off_function_name);
-  turn_lamp_off_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::turnLampOffHandler));
+  turn_lamp_off_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::turnLampOffHandler));
 
   modular_server::Function & play_short_tone_function = modular_server_.createFunction(constants::play_short_tone_function_name);
-  play_short_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::playShortToneHandler));
+  play_short_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playShortToneHandler));
 
   modular_server::Function & play_medium_tone_function = modular_server_.createFunction(constants::play_medium_tone_function_name);
-  play_medium_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::playMediumToneHandler));
+  play_medium_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playMediumToneHandler));
 
   modular_server::Function & play_long_tone_function = modular_server_.createFunction(constants::play_long_tone_function_name);
-  play_long_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&ToydadInterface::playLongToneHandler));
+  play_long_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playLongToneHandler));
 
   // Callbacks
 }
 
-bool ToydadInterface::communicating()
+bool UltravioletDetectorInterface::communicating()
 {
   char * detector_name = NULL;
   return getDetectorName(detector_name);
 }
 
-bool ToydadInterface::getDetectorName(char * & detector_name)
+bool UltravioletDetectorInterface::getDetectorName(char * & detector_name)
 {
   detector_name = response_data_;
   const char key[] = "DTr";
@@ -101,7 +101,7 @@ bool ToydadInterface::getDetectorName(char * & detector_name)
   return success;
 }
 
-bool ToydadInterface::getHardwareVersion(char * & hardware_version)
+bool UltravioletDetectorInterface::getHardwareVersion(char * & hardware_version)
 {
   hardware_version = response_data_;
   const char key[] = "HWr";
@@ -109,7 +109,7 @@ bool ToydadInterface::getHardwareVersion(char * & hardware_version)
   return success;
 }
 
-bool ToydadInterface::getModel(char * & model)
+bool UltravioletDetectorInterface::getModel(char * & model)
 {
   model = response_data_;
   const char key[] = "MDr";
@@ -117,7 +117,7 @@ bool ToydadInterface::getModel(char * & model)
   return success;
 }
 
-bool ToydadInterface::getFirmwareVersion(char * & firmware_version)
+bool UltravioletDetectorInterface::getFirmwareVersion(char * & firmware_version)
 {
   firmware_version = response_data_;
   const char key[] = "SWr";
@@ -125,7 +125,7 @@ bool ToydadInterface::getFirmwareVersion(char * & firmware_version)
   return success;
 }
 
-bool ToydadInterface::getSerialNumber(char * & serial_number)
+bool UltravioletDetectorInterface::getSerialNumber(char * & serial_number)
 {
   serial_number = response_data_;
   const char key[] = "SNr";
@@ -133,7 +133,7 @@ bool ToydadInterface::getSerialNumber(char * & serial_number)
   return success;
 }
 
-bool ToydadInterface::getStatus(Status & status)
+bool UltravioletDetectorInterface::getStatus(Status & status)
 {
   const char key[] = "STr";
   bool success = sendCommandGetResponse(key);
@@ -148,7 +148,7 @@ bool ToydadInterface::getStatus(Status & status)
   return success;
 }
 
-bool ToydadInterface::lampIsOn()
+bool UltravioletDetectorInterface::lampIsOn()
 {
   const char key[] = "LPr";
   bool success = sendCommandGetResponse(key);
@@ -160,42 +160,42 @@ bool ToydadInterface::lampIsOn()
   return lamp_is_on;
 }
 
-bool ToydadInterface::turnLampOn()
+bool UltravioletDetectorInterface::turnLampOn()
 {
   const char key[] = "LPwT";
   bool success = sendCommandGetResponse(key);
   return success;
 }
 
-bool ToydadInterface::turnLampOff()
+bool UltravioletDetectorInterface::turnLampOff()
 {
   const char key[] = "LPwF";
   bool success = sendCommandGetResponse(key);
   return success;
 }
 
-bool ToydadInterface::playShortTone()
+bool UltravioletDetectorInterface::playShortTone()
 {
   const char key[] = "SGw1";
   bool success = sendCommandGetResponse(key);
   return success;
 }
 
-bool ToydadInterface::playMediumTone()
+bool UltravioletDetectorInterface::playMediumTone()
 {
   const char key[] = "SGw2";
   bool success = sendCommandGetResponse(key);
   return success;
 }
 
-bool ToydadInterface::playLongTone()
+bool UltravioletDetectorInterface::playLongTone()
 {
   const char key[] = "SGw3";
   bool success = sendCommandGetResponse(key);
   return success;
 }
 
-bool ToydadInterface::sendCommandGetResponse(const char command[])
+bool UltravioletDetectorInterface::sendCommandGetResponse(const char command[])
 {
   initializeRequestAndResponse();
   strcat(request_,constants::line_beginning);
@@ -217,12 +217,12 @@ bool ToydadInterface::sendCommandGetResponse(const char command[])
   return success;
 }
 
-size_t ToydadInterface::getResponseLength()
+size_t UltravioletDetectorInterface::getResponseLength()
 {
   return strlen(response_);
 }
 
-void ToydadInterface::initializeRequestAndResponse()
+void UltravioletDetectorInterface::initializeRequestAndResponse()
 {
   request_[0] = '\0';
   request_key_[0] = '\0';
@@ -249,7 +249,7 @@ void ToydadInterface::initializeRequestAndResponse()
 // modular_server_.property(property_name).getElementValue(element_index,value) value type must match the property array element default type
 // modular_server_.property(property_name).setElementValue(element_index,value) value type must match the property array element default type
 
-void ToydadInterface::getDetectorInfoHandler()
+void UltravioletDetectorInterface::getDetectorInfoHandler()
 {
   if (!communicating())
   {
@@ -280,7 +280,7 @@ void ToydadInterface::getDetectorInfoHandler()
   modular_server_.response().endObject();
 }
 
-void ToydadInterface::getStatusHandler()
+void UltravioletDetectorInterface::getStatusHandler()
 {
   Status status;
   bool success = getStatus(status);
@@ -348,7 +348,7 @@ void ToydadInterface::getStatusHandler()
   modular_server_.response().endObject();
 }
 
-void ToydadInterface::lampIsOnHandler()
+void UltravioletDetectorInterface::lampIsOnHandler()
 {
   if (!communicating())
   {
@@ -359,7 +359,7 @@ void ToydadInterface::lampIsOnHandler()
   modular_server_.response().returnResult(lamp_is_on);
 }
 
-void ToydadInterface::turnLampOnHandler()
+void UltravioletDetectorInterface::turnLampOnHandler()
 {
   bool success = turnLampOn();
   if (!success)
@@ -369,7 +369,7 @@ void ToydadInterface::turnLampOnHandler()
   }
 }
 
-void ToydadInterface::turnLampOffHandler()
+void UltravioletDetectorInterface::turnLampOffHandler()
 {
   bool success = turnLampOff();
   if (!success)
@@ -379,7 +379,7 @@ void ToydadInterface::turnLampOffHandler()
   }
 }
 
-void ToydadInterface::playShortToneHandler()
+void UltravioletDetectorInterface::playShortToneHandler()
 {
   bool success = playShortTone();
   if (!success)
@@ -389,7 +389,7 @@ void ToydadInterface::playShortToneHandler()
   }
 }
 
-void ToydadInterface::playMediumToneHandler()
+void UltravioletDetectorInterface::playMediumToneHandler()
 {
   bool success = playMediumTone();
   if (!success)
@@ -399,7 +399,7 @@ void ToydadInterface::playMediumToneHandler()
   }
 }
 
-void ToydadInterface::playLongToneHandler()
+void UltravioletDetectorInterface::playLongToneHandler()
 {
   bool success = playLongTone();
   if (!success)

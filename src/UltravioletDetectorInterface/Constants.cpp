@@ -8,13 +8,13 @@
 #include "Constants.h"
 
 
-namespace toydad_interface
+namespace ultraviolet_detector_interface
 {
 namespace constants
 {
-CONSTANT_STRING(device_name,"toydad_interface");
+CONSTANT_STRING(device_name,"ultraviolet_detector_interface");
 
-CONSTANT_STRING(firmware_name,"ToydadInterface");
+CONSTANT_STRING(firmware_name,"UltravioletDetectorInterface");
 // Use semantic versioning http://semver.org/
 const modular_server::FirmwareInfo firmware_info =
 {

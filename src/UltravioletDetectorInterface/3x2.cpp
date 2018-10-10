@@ -1,16 +1,16 @@
 // ----------------------------------------------------------------------------
-// 5x3.cpp
+// 3x2.cpp
 //
 //
 // Authors:
 // Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
-#include "5x3.h"
+#include "3x2.h"
 
 
-#if defined(__MK64FX512__)
+#if defined(__MK20DX256__)
 
-namespace toydad_interface
+namespace ultraviolet_detector_interface
 {
 namespace constants
 {
@@ -22,24 +22,20 @@ namespace constants
 const long bauds_default[serial_interface::constants::SERIAL_STREAM_COUNT] =
 {
   baud_default,
-  baud_default,
 };
 
 const ConstantString * const formats_default[serial_interface::constants::SERIAL_STREAM_COUNT] =
 {
-  format_ptr_default,
   format_ptr_default,
 };
 
 const ConstantString * const line_endings_default[serial_interface::constants::SERIAL_STREAM_COUNT] =
 {
   line_ending_ptr_default,
-  line_ending_ptr_default,
 };
 
 const long timeouts_default[serial_interface::constants::SERIAL_STREAM_COUNT] =
 {
-  timeout_default,
   timeout_default,
 };
 

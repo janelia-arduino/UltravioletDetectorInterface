@@ -2,7 +2,7 @@
   "id": "getApi",
   "result": {
     "firmware": [
-      "ToydadInterface"
+      "UltravioletDetectorInterface"
     ],
     "verbosity": "GENERAL",
     "functions": [
