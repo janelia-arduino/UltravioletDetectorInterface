@@ -58,10 +58,12 @@ public:
   bool playLongTone();
 
   typedef Array<size_t,ultraviolet_detector_interface::constants::CHANNEL_COUNT_MAX> WavelengthArray;
-
   bool getWavelengthRange(WavelengthArray & range);
-  bool getChannelWavelengths(WavelengthArray & channel_wavelengths);
-  bool setChannelWavelengths(const WavelengthArray & channel_wavelengths);
+  bool getWavelengths(WavelengthArray & wavelengths);
+  bool setWavelengths(const WavelengthArray & wavelengths);
+
+  typedef Array<double,ultraviolet_detector_interface::constants::CHANNEL_COUNT_MAX> AbsorbanceArray;
+  bool getAbsorbances(AbsorbanceArray & absorbances);
 
 private:
   modular_server::Property properties_[ultraviolet_detector_interface::constants::PROPERTY_COUNT_MAX];
@@ -89,8 +91,9 @@ private:
   void playMediumToneHandler();
   void playLongToneHandler();
   void getWavelengthRangeHandler();
-  void getChannelWavelengthsHandler();
-  void setChannelWavelengthsHandler();
+  void getWavelengthsHandler();
+  void setWavelengthsHandler();
+  void getAbsorbancesHandler();
 
 };
 

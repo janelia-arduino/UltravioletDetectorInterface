@@ -18,7 +18,7 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=11};
+enum{FUNCTION_COUNT_MAX=12};
 enum{CALLBACK_COUNT_MAX=1};
 
 enum{CHANNEL_COUNT_MAX=4};
@@ -83,7 +83,7 @@ extern const long timeout_default;
 // Parameters
 extern const long wavelength_min;
 extern const long wavelength_max;
-extern ConstantString channel_wavelengths_parameter_name;
+extern ConstantString wavelengths_parameter_name;
 
 // Functions
 extern ConstantString get_detector_info_function_name;
@@ -95,8 +95,9 @@ extern ConstantString play_short_tone_function_name;
 extern ConstantString play_medium_tone_function_name;
 extern ConstantString play_long_tone_function_name;
 extern ConstantString get_wavelength_range_function_name;
-extern ConstantString get_channel_wavelengths_function_name;
-extern ConstantString set_channel_wavelengths_function_name;
+extern ConstantString get_wavelengths_function_name;
+extern ConstantString set_wavelengths_function_name;
+extern ConstantString get_absorbances_function_name;
 
 // Callbacks
 
