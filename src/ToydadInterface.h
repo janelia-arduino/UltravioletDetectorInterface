@@ -57,6 +57,8 @@ public:
   bool playMediumTone();
   bool playLongTone();
 
+  typedef Array<size_t,toydad_interface::constants::CHANNEL_COUNT_MAX> WavelengthArray;
+
 private:
   modular_server::Property properties_[toydad_interface::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[toydad_interface::constants::PARAMETER_COUNT_MAX];
