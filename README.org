@@ -26,7 +26,22 @@
         "verbosity": "NAMES",
         "functions": [
           "getDetectorInfo",
-          "getStatus"
+          "getStatus",
+          "lampIsOn",
+          "turnLampOn",
+          "turnLampOff",
+          "autozero",
+          "isAutozeroing",
+          "playShortTone",
+          "playMediumTone",
+          "playLongTone",
+          "getWavelengthRange",
+          "getWavelengths",
+          "setWavelengths",
+          "getAbsorbances"
+        ],
+        "parameters": [
+          "wavelengths"
         ]
       }
     }

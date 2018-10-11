@@ -43,6 +43,11 @@ CONSTANT_STRING(status_user_calib_constant_string,"USER_CALIB");
 CONSTANT_STRING(status_self_test_constant_string,"SELF_TEST");
 CONSTANT_STRING(status_scan_abs_subs_constant_string,"SCAN_ABS_SUBS");
 
+CONSTANT_STRING(hardware_error_constant_string,"hardware_error");
+
+const int absorbance_base = 10;
+const double absorbance_divisor = 100;
+
 // Pins
 
 // Units
@@ -80,6 +85,8 @@ CONSTANT_STRING(get_status_function_name,"getStatus");
 CONSTANT_STRING(lamp_is_on_function_name,"lampIsOn");
 CONSTANT_STRING(turn_lamp_on_function_name,"turnLampOn");
 CONSTANT_STRING(turn_lamp_off_function_name,"turnLampOff");
+CONSTANT_STRING(autozero_function_name,"autozero");
+CONSTANT_STRING(is_autozeroing_function_name,"isAutozeroing");
 CONSTANT_STRING(play_short_tone_function_name,"playShortTone");
 CONSTANT_STRING(play_medium_tone_function_name,"playMediumTone");
 CONSTANT_STRING(play_long_tone_function_name,"playLongTone");
@@ -91,6 +98,11 @@ CONSTANT_STRING(get_absorbances_function_name,"getAbsorbances");
 // Callbacks
 
 // Errors
+CONSTANT_STRING(no_error,"No error.");
 CONSTANT_STRING(not_communicating_error,"The detector is not communicating. Check power and connections.");
+CONSTANT_STRING(invalid_command_error,"Invalid command. It does not exist or it has an invalid pattern.");
+CONSTANT_STRING(invalid_parameter_error,"Value of parameter is out of range.");
+CONSTANT_STRING(invalid_mode_error,"Invalid mode for applied command.");
+CONSTANT_STRING(operation_error,"Operation end with error.");
 }
 }

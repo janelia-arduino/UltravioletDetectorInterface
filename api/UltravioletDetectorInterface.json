@@ -17,6 +17,70 @@
         "result_info": {
           "type": "string"
         }
+      },
+      {
+        "name": "lampIsOn",
+        "result_info": {
+          "type": "bool"
+        }
+      },
+      {
+        "name": "turnLampOn"
+      },
+      {
+        "name": "turnLampOff"
+      },
+      {
+        "name": "autozero"
+      },
+      {
+        "name": "isAutozeroing",
+        "result_info": {
+          "type": "bool"
+        }
+      },
+      {
+        "name": "playShortTone"
+      },
+      {
+        "name": "playMediumTone"
+      },
+      {
+        "name": "playLongTone"
+      },
+      {
+        "name": "getWavelengthRange",
+        "result_info": {
+          "type": "array",
+          "array_element_type": "long"
+        }
+      },
+      {
+        "name": "getWavelengths",
+        "result_info": {
+          "type": "array",
+          "array_element_type": "long"
+        }
+      },
+      {
+        "name": "setWavelengths",
+        "parameters": [
+          "wavelengths"
+        ]
+      },
+      {
+        "name": "getAbsorbances",
+        "result_info": {
+          "type": "array",
+          "array_element_type": "double"
+        }
+      }
+    ],
+    "parameters": [
+      {
+        "name": "wavelengths",
+        "type": "array",
+        "array_element_type": "long"
       }
     ]
   }

@@ -23,6 +23,7 @@ void UltravioletDetectorInterface::setup()
   resetWatchdog();
 
   // Variable Setup
+  error_ptr_ = &constants::no_error;
 
   // Set Device ID
   modular_server_.setDeviceName(constants::device_name);
@@ -77,6 +78,13 @@ void UltravioletDetectorInterface::setup()
 
   modular_server::Function & turn_lamp_off_function = modular_server_.createFunction(constants::turn_lamp_off_function_name);
   turn_lamp_off_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::turnLampOffHandler));
+
+  modular_server::Function & autozero_function = modular_server_.createFunction(constants::autozero_function_name);
+  autozero_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::autozeroHandler));
+
+  modular_server::Function & is_autozeroing_function = modular_server_.createFunction(constants::is_autozeroing_function_name);
+  is_autozeroing_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::isAutozeroingHandler));
+  is_autozeroing_function.setResultTypeBool();
 
   modular_server::Function & play_short_tone_function = modular_server_.createFunction(constants::play_short_tone_function_name);
   play_short_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playShortToneHandler));
@@ -155,7 +163,8 @@ bool UltravioletDetectorInterface::getSerialNumber(char * & serial_number)
   return success;
 }
 
-bool UltravioletDetectorInterface::getStatus(Status & status)
+bool UltravioletDetectorInterface::getStatus(Status & status,
+                                             char * const & hardware_error)
 {
   const char command[] = "STr";
   bool success = sendCommandGetResponse(command);
@@ -167,19 +176,31 @@ bool UltravioletDetectorInterface::getStatus(Status & status)
   memset(status_str,0,constants::STATUS_BUFFER_SIZE);
   strncpy(status_str,(response_data_ + constants::STATUS_OFFSET),constants::STATUS_SIZE);
   status = static_cast<Status>(atoi(status_str));
+  memset(hardware_error,0,constants::HARDWARE_ERROR_BUFFER_SIZE);
+  strncpy(hardware_error,(response_data_ + constants::HARDWARE_ERROR_OFFSET),constants::HARDWARE_ERROR_SIZE);
   return success;
 }
 
-bool UltravioletDetectorInterface::lampIsOn()
+const ConstantString & UltravioletDetectorInterface::getCommunicationError()
 {
+  if (error_ptr_ == NULL)
+  {
+    return constants::no_error;
+  }
+  return *error_ptr_;
+}
+
+bool UltravioletDetectorInterface::lampIsOn(bool & lamp_is_on)
+{
+  lamp_is_on = false;
   const char command[] = "LPr";
   bool success = sendCommandGetResponse(command);
   if (!success)
   {
     return success;
   }
-  bool lamp_is_on = (strcmp("T",response_data_) == 0);
-  return lamp_is_on;
+  lamp_is_on = (strcmp("T",response_data_) == 0);
+  return success;
 }
 
 bool UltravioletDetectorInterface::turnLampOn()
@@ -193,6 +214,26 @@ bool UltravioletDetectorInterface::turnLampOff()
 {
   const char command[] = "LPwF";
   bool success = sendCommandGetResponse(command);
+  return success;
+}
+
+bool UltravioletDetectorInterface::autozero()
+{
+  const char command[] = "ZRw";
+  bool success = sendCommandGetResponse(command);
+  return success;
+}
+
+bool UltravioletDetectorInterface::isAutozeroing(bool & is_autozeroing)
+{
+  is_autozeroing = false;
+  const char command[] = "ZRr";
+  bool success = sendCommandGetResponse(command);
+  if (!success)
+  {
+    return success;
+  }
+  is_autozeroing = (strcmp("T",response_data_) == 0);
   return success;
 }
 
@@ -286,16 +327,21 @@ bool UltravioletDetectorInterface::getAbsorbances(AbsorbanceArray & absorbances)
   {
     return success;
   }
+  // bool success = true;
+  // const char test[] = "A+040050:0B-000028:0C+088000:0D+120400:0";
   char absorbance_str[constants::ABSORBANCE_BUFFER_SIZE];
-  size_t absorbance;
+  double absorbance;
   size_t offset;
+  char * end;
   absorbances.clear();
   for (size_t channel=0; channel<constants::CHANNEL_COUNT_MAX; ++channel)
   {
     memset(absorbance_str,0,constants::ABSORBANCE_BUFFER_SIZE);
-    offset = channel * (constants::ABSORBANCE_SIZE + constants::ABSORBANCE_OFFSET) + constants::ABSORBANCE_OFFSET;
+    offset = channel * (constants::ABSORBANCE_SIZE + constants::ABSORBANCE_OFFSET + constants::ABSORBANCE_TAIL_SIZE) + constants::ABSORBANCE_OFFSET;
     strncpy(absorbance_str,(response_data_ + offset),constants::ABSORBANCE_SIZE);
-    absorbance = atoi(absorbance_str);
+    // strncpy(absorbance_str,(test + offset),constants::ABSORBANCE_SIZE);
+    absorbance = strtol(absorbance_str,&end,constants::absorbance_base);
+    absorbance = absorbance / constants::absorbance_divisor;
     absorbances.push_back(absorbance);
   }
   return success;
@@ -316,7 +362,28 @@ bool UltravioletDetectorInterface::sendCommandGetResponse(const char command[])
   // Serial << "response_key_ = " << response_key_ << "\n";
   // Serial << "response_data_ = " << response_data_ << "\n";
   bool success = false;
-  if (strcmp(request_key_,response_key_) == 0)
+  error_ptr_ = &constants::no_error;
+  if (strcmp("???",response_key_) == 0)
+  {
+    error_ptr_ = &constants::invalid_command_error;
+  }
+  else if (strcmp(request_key_,response_key_) != 0)
+  {
+    error_ptr_ = &constants::not_communicating_error;
+  }
+  else if (strcmp("ERR2",response_data_) == 0)
+  {
+    error_ptr_ = &constants::invalid_parameter_error;
+  }
+  else if (strcmp("ERR4",response_data_) == 0)
+  {
+    error_ptr_ = &constants::invalid_mode_error;
+  }
+  else if (strcmp("ERR5",response_data_) == 0)
+  {
+    error_ptr_ = &constants::operation_error;
+  }
+  else
   {
     success = true;
   }
@@ -359,7 +426,7 @@ void UltravioletDetectorInterface::getDetectorInfoHandler()
 {
   if (!communicating())
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
   modular_server_.response().writeResultKey();
@@ -389,10 +456,11 @@ void UltravioletDetectorInterface::getDetectorInfoHandler()
 void UltravioletDetectorInterface::getStatusHandler()
 {
   Status status;
-  bool success = getStatus(status);
+  char hardware_error[constants::HARDWARE_ERROR_BUFFER_SIZE];
+  bool success = getStatus(status,hardware_error);
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
 
@@ -450,18 +518,23 @@ void UltravioletDetectorInterface::getStatusHandler()
     }
   }
   modular_server_.response().write(constants::status_constant_string,status_ptr);
+  if (strcmp("00000000",hardware_error) != 0)
+  {
+    modular_server_.response().write(constants::hardware_error_constant_string,hardware_error);
+  }
 
   modular_server_.response().endObject();
 }
 
 void UltravioletDetectorInterface::lampIsOnHandler()
 {
-  if (!communicating())
+  bool lamp_is_on;
+  bool success = lampIsOn(lamp_is_on);
+  if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
-  bool lamp_is_on = lampIsOn();
   modular_server_.response().returnResult(lamp_is_on);
 }
 
@@ -470,7 +543,7 @@ void UltravioletDetectorInterface::turnLampOnHandler()
   bool success = turnLampOn();
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
 }
@@ -480,9 +553,31 @@ void UltravioletDetectorInterface::turnLampOffHandler()
   bool success = turnLampOff();
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
+}
+
+void UltravioletDetectorInterface::autozeroHandler()
+{
+  bool success = autozero();
+  if (!success)
+  {
+    modular_server_.response().returnError(getCommunicationError());
+    return;
+  }
+}
+
+void UltravioletDetectorInterface::isAutozeroingHandler()
+{
+  bool is_autozeroing;
+  bool success = isAutozeroing(is_autozeroing);
+  if (!success)
+  {
+    modular_server_.response().returnError(getCommunicationError());
+    return;
+  }
+  modular_server_.response().returnResult(is_autozeroing);
 }
 
 void UltravioletDetectorInterface::playShortToneHandler()
@@ -490,7 +585,7 @@ void UltravioletDetectorInterface::playShortToneHandler()
   bool success = playShortTone();
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
 }
@@ -500,7 +595,7 @@ void UltravioletDetectorInterface::playMediumToneHandler()
   bool success = playMediumTone();
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
 }
@@ -510,7 +605,7 @@ void UltravioletDetectorInterface::playLongToneHandler()
   bool success = playLongTone();
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
 }
@@ -521,7 +616,7 @@ void UltravioletDetectorInterface::getWavelengthRangeHandler()
   bool success = getWavelengthRange(range);
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
   modular_server_.response().returnResult(range);
@@ -533,7 +628,7 @@ void UltravioletDetectorInterface::getWavelengthsHandler()
   bool success = getWavelengths(wavelengths);
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
   modular_server_.response().returnResult(wavelengths);
@@ -554,7 +649,7 @@ void UltravioletDetectorInterface::setWavelengthsHandler()
   bool success = setWavelengths(wavelengths);
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
 }
@@ -565,7 +660,7 @@ void UltravioletDetectorInterface::getAbsorbancesHandler()
   bool success = getAbsorbances(absorbances);
   if (!success)
   {
-    modular_server_.response().returnError(constants::not_communicating_error);
+    modular_server_.response().returnError(getCommunicationError());
     return;
   }
   modular_server_.response().returnResult(absorbances);

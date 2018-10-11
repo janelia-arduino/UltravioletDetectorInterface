@@ -47,11 +47,16 @@ public:
     SELF_TEST = 7,
     SCAN_ABS_SUBS = 9,
   };
-  bool getStatus(Status & status);
+  bool getStatus(Status & status,
+                 char * const & hardware_error);
+  const ConstantString & getCommunicationError();
 
-  bool lampIsOn();
+  bool lampIsOn(bool & lamp_is_on);
   bool turnLampOn();
   bool turnLampOff();
+
+  bool autozero();
+  bool isAutozeroing(bool & is_autozeroing);
 
   bool playShortTone();
   bool playMediumTone();
@@ -77,6 +82,8 @@ private:
   char response_key_[ultraviolet_detector_interface::constants::KEY_BUFFER_SIZE];
   char * const response_data_ = response_ + ultraviolet_detector_interface::constants::KEY_SIZE;
 
+  const ConstantString * error_ptr_;
+
   bool sendCommandGetResponse(const char command[]);
   size_t getResponseLength();
   void initializeRequestAndResponse();
@@ -87,6 +94,8 @@ private:
   void lampIsOnHandler();
   void turnLampOnHandler();
   void turnLampOffHandler();
+  void autozeroHandler();
+  void isAutozeroingHandler();
   void playShortToneHandler();
   void playMediumToneHandler();
   void playLongToneHandler();
