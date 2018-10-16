@@ -48,7 +48,7 @@ public:
     SCAN_ABS_SUBS = 9,
   };
   bool getStatus(Status & status,
-                 char * const & hardware_error);
+    char * const & hardware_error);
   const ConstantString & getCommunicationError();
 
   bool lampIsOn(bool & lamp_is_on);

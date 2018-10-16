@@ -34,10 +34,10 @@ void UltravioletDetectorInterface::setup()
 
   // Add Firmware
   modular_server_.addFirmware(constants::firmware_info,
-                              properties_,
-                              parameters_,
-                              functions_,
-                              callbacks_);
+    properties_,
+    parameters_,
+    functions_,
+    callbacks_);
 
   // Properties
   modular_server::Property & bauds_property = modular_server_.property(serial_interface::constants::bauds_property_name);
@@ -164,7 +164,7 @@ bool UltravioletDetectorInterface::getSerialNumber(char * & serial_number)
 }
 
 bool UltravioletDetectorInterface::getStatus(Status & status,
-                                             char * const & hardware_error)
+  char * const & hardware_error)
 {
   const char command[] = "STr";
   bool success = sendCommandGetResponse(command);
