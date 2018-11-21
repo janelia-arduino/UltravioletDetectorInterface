@@ -464,10 +464,6 @@ void UltravioletDetectorInterface::getStatusHandler()
     return;
   }
 
-  modular_server_.response().writeResultKey();
-
-  modular_server_.response().beginObject();
-
   ConstantString * status_ptr = NULL;
   switch (status)
   {
@@ -517,13 +513,14 @@ void UltravioletDetectorInterface::getStatusHandler()
       break;
     }
   }
-  modular_server_.response().write(constants::status_constant_string,status_ptr);
-  if (strcmp("00000000",hardware_error) != 0)
+  if (strcmp("00000000",hardware_error) == 0)
   {
-    modular_server_.response().write(constants::hardware_error_constant_string,hardware_error);
+    modular_server_.response().returnResult(status_ptr);
   }
-
-  modular_server_.response().endObject();
+  else
+  {
+    modular_server_.response().returnResult(hardware_error);
+  }
 }
 
 void UltravioletDetectorInterface::lampIsOnHandler()
