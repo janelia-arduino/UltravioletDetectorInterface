@@ -48,9 +48,13 @@ void UltravioletDetectorInterface::setup()
   formats_property.setDefaultValue(constants::formats_default);
   formats_property.setSubset(constants::format_ptr_subset);
 
-  modular_server::Property & line_endings_property = modular_server_.property(serial_interface::constants::line_endings_property_name);
-  line_endings_property.setDefaultValue(constants::line_endings_default);
-  line_endings_property.setSubset(constants::line_ending_ptr_subset);
+  modular_server::Property & write_line_endings_property = modular_server_.property(serial_interface::constants::write_line_endings_property_name);
+  write_line_endings_property.setDefaultValue(constants::line_endings_default);
+  write_line_endings_property.setSubset(constants::line_ending_ptr_subset);
+
+  modular_server::Property & read_line_endings_property = modular_server_.property(serial_interface::constants::read_line_endings_property_name);
+  read_line_endings_property.setDefaultValue(constants::line_endings_default);
+  read_line_endings_property.setSubset(constants::line_ending_ptr_subset);
 
   modular_server::Property & timeouts_property = modular_server_.property(serial_interface::constants::timeouts_property_name);
   timeouts_property.setDefaultValue(constants::timeouts_default);

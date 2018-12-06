@@ -21,7 +21,7 @@ const modular_server::FirmwareInfo firmware_info =
   .name_ptr=&firmware_name,
   .version_major=1,
   .version_minor=0,
-  .version_patch=1,
+  .version_patch=2,
 };
 
 const char * line_beginning = "#";
@@ -70,6 +70,7 @@ modular_server::SubsetMemberType line_ending_ptr_subset[LINE_ENDING_SUBSET_LENGT
 {
   {.cs_ptr=&serial_interface::constants::line_ending_lf},
 };
+
 const ConstantString * const line_ending_ptr_default = &serial_interface::constants::line_ending_lf;
 
 const long timeout_default = 100;
