@@ -4,7 +4,7 @@
 
 * Library Information
   - Name :: UltravioletDetectorInterface
-  - Version :: 1.0.2
+  - Version :: 1.1.0
   - License :: BSD
   - URL :: https://github.com/janelia-arduino/UltravioletDetectorInterface
   - Author :: Peter Polidoro
@@ -28,13 +28,7 @@
           "getDetectorInfo",
           "getStatus",
           "lampIsOn",
-          "turnLampOn",
-          "turnLampOff",
-          "autozero",
           "isAutozeroing",
-          "playShortTone",
-          "playMediumTone",
-          "playLongTone",
           "getWavelengthRange",
           "getWavelengths",
           "setWavelengths",
@@ -42,6 +36,14 @@
         ],
         "parameters": [
           "wavelengths"
+        ],
+        "callbacks": [
+          "turnLampOn",
+          "turnLampOff",
+          "autozero",
+          "playShortTone",
+          "playMediumTone",
+          "playLongTone"
         ]
       }
     }

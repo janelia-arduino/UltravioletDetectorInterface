@@ -31,6 +31,7 @@ void UltravioletDetectorInterface::setup()
   // Add Hardware
 
   // Pins
+  modular_server::Pin & btn_a_pin = modular_server_.pin(modular_device_base::constants::btn_a_pin_name);
 
   // Add Firmware
   modular_server_.addFirmware(constants::firmware_info,
@@ -77,27 +78,9 @@ void UltravioletDetectorInterface::setup()
   lamp_is_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::lampIsOnHandler));
   lamp_is_on_function.setResultTypeBool();
 
-  modular_server::Function & turn_lamp_on_function = modular_server_.createFunction(constants::turn_lamp_on_function_name);
-  turn_lamp_on_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::turnLampOnHandler));
-
-  modular_server::Function & turn_lamp_off_function = modular_server_.createFunction(constants::turn_lamp_off_function_name);
-  turn_lamp_off_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::turnLampOffHandler));
-
-  modular_server::Function & autozero_function = modular_server_.createFunction(constants::autozero_function_name);
-  autozero_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::autozeroHandler));
-
   modular_server::Function & is_autozeroing_function = modular_server_.createFunction(constants::is_autozeroing_function_name);
   is_autozeroing_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::isAutozeroingHandler));
   is_autozeroing_function.setResultTypeBool();
-
-  modular_server::Function & play_short_tone_function = modular_server_.createFunction(constants::play_short_tone_function_name);
-  play_short_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playShortToneHandler));
-
-  modular_server::Function & play_medium_tone_function = modular_server_.createFunction(constants::play_medium_tone_function_name);
-  play_medium_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playMediumToneHandler));
-
-  modular_server::Function & play_long_tone_function = modular_server_.createFunction(constants::play_long_tone_function_name);
-  play_long_tone_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::playLongToneHandler));
 
   modular_server::Function & get_wavelength_range_function = modular_server_.createFunction(constants::get_wavelength_range_function_name);
   get_wavelength_range_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&UltravioletDetectorInterface::getWavelengthRangeHandler));
@@ -119,6 +102,25 @@ void UltravioletDetectorInterface::setup()
   get_absorbances_function.setResultTypeArray();
 
   // Callbacks
+  modular_server::Callback & turn_lamp_on_callback = modular_server_.createCallback(constants::turn_lamp_on_callback_name);
+  turn_lamp_on_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&UltravioletDetectorInterface::turnLampOnHandler));
+
+  modular_server::Callback & turn_lamp_off_callback = modular_server_.createCallback(constants::turn_lamp_off_callback_name);
+  turn_lamp_off_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&UltravioletDetectorInterface::turnLampOffHandler));
+
+  modular_server::Callback & autozero_callback = modular_server_.createCallback(constants::autozero_callback_name);
+  autozero_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&UltravioletDetectorInterface::autozeroHandler));
+
+  modular_server::Callback & play_short_tone_callback = modular_server_.createCallback(constants::play_short_tone_callback_name);
+  play_short_tone_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&UltravioletDetectorInterface::playShortToneHandler));
+
+  modular_server::Callback & play_medium_tone_callback = modular_server_.createCallback(constants::play_medium_tone_callback_name);
+  play_medium_tone_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&UltravioletDetectorInterface::playMediumToneHandler));
+  play_medium_tone_callback.attachTo(btn_a_pin,modular_server::constants::pin_mode_interrupt_falling);
+
+  modular_server::Callback & play_long_tone_callback = modular_server_.createCallback(constants::play_long_tone_callback_name);
+  play_long_tone_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&UltravioletDetectorInterface::playLongToneHandler));
+
 }
 
 bool UltravioletDetectorInterface::communicating()
@@ -539,34 +541,19 @@ void UltravioletDetectorInterface::lampIsOnHandler()
   modular_server_.response().returnResult(lamp_is_on);
 }
 
-void UltravioletDetectorInterface::turnLampOnHandler()
+void UltravioletDetectorInterface::turnLampOnHandler(modular_server::Pin * pin_ptr)
 {
-  bool success = turnLampOn();
-  if (!success)
-  {
-    modular_server_.response().returnError(getCommunicationError());
-    return;
-  }
+  turnLampOn();
 }
 
-void UltravioletDetectorInterface::turnLampOffHandler()
+void UltravioletDetectorInterface::turnLampOffHandler(modular_server::Pin * pin_ptr)
 {
-  bool success = turnLampOff();
-  if (!success)
-  {
-    modular_server_.response().returnError(getCommunicationError());
-    return;
-  }
+  turnLampOff();
 }
 
-void UltravioletDetectorInterface::autozeroHandler()
+void UltravioletDetectorInterface::autozeroHandler(modular_server::Pin * pin_ptr)
 {
-  bool success = autozero();
-  if (!success)
-  {
-    modular_server_.response().returnError(getCommunicationError());
-    return;
-  }
+  autozero();
 }
 
 void UltravioletDetectorInterface::isAutozeroingHandler()
@@ -581,34 +568,19 @@ void UltravioletDetectorInterface::isAutozeroingHandler()
   modular_server_.response().returnResult(is_autozeroing);
 }
 
-void UltravioletDetectorInterface::playShortToneHandler()
+void UltravioletDetectorInterface::playShortToneHandler(modular_server::Pin * pin_ptr)
 {
-  bool success = playShortTone();
-  if (!success)
-  {
-    modular_server_.response().returnError(getCommunicationError());
-    return;
-  }
+  playShortTone();
 }
 
-void UltravioletDetectorInterface::playMediumToneHandler()
+void UltravioletDetectorInterface::playMediumToneHandler(modular_server::Pin * pin_ptr)
 {
-  bool success = playMediumTone();
-  if (!success)
-  {
-    modular_server_.response().returnError(getCommunicationError());
-    return;
-  }
+  playMediumTone();
 }
 
-void UltravioletDetectorInterface::playLongToneHandler()
+void UltravioletDetectorInterface::playLongToneHandler(modular_server::Pin * pin_ptr)
 {
-  bool success = playLongTone();
-  if (!success)
-  {
-    modular_server_.response().returnError(getCommunicationError());
-    return;
-  }
+  playLongTone();
 }
 
 void UltravioletDetectorInterface::getWavelengthRangeHandler()

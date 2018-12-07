@@ -18,8 +18,8 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=1};
 enum{PARAMETER_COUNT_MAX=1};
-enum{FUNCTION_COUNT_MAX=14};
-enum{CALLBACK_COUNT_MAX=1};
+enum{FUNCTION_COUNT_MAX=8};
+enum{CALLBACK_COUNT_MAX=6};
 
 enum{CHANNEL_COUNT_MAX=4};
 
@@ -101,19 +101,19 @@ extern ConstantString wavelengths_parameter_name;
 extern ConstantString get_detector_info_function_name;
 extern ConstantString get_status_function_name;
 extern ConstantString lamp_is_on_function_name;
-extern ConstantString turn_lamp_on_function_name;
-extern ConstantString turn_lamp_off_function_name;
-extern ConstantString autozero_function_name;
 extern ConstantString is_autozeroing_function_name;
-extern ConstantString play_short_tone_function_name;
-extern ConstantString play_medium_tone_function_name;
-extern ConstantString play_long_tone_function_name;
 extern ConstantString get_wavelength_range_function_name;
 extern ConstantString get_wavelengths_function_name;
 extern ConstantString set_wavelengths_function_name;
 extern ConstantString get_absorbances_function_name;
 
 // Callbacks
+extern ConstantString turn_lamp_on_callback_name;
+extern ConstantString turn_lamp_off_callback_name;
+extern ConstantString autozero_callback_name;
+extern ConstantString play_short_tone_callback_name;
+extern ConstantString play_medium_tone_callback_name;
+extern ConstantString play_long_tone_callback_name;
 
 // Errors
 extern ConstantString no_error;
