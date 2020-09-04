@@ -417,8 +417,8 @@ void UltravioletDetectorInterface::initializeRequestAndResponse()
 // floating-point number (float, double)
 // bool
 // const char *
-// ArduinoJson::JsonArray *
-// ArduinoJson::JsonObject *
+// ArduinoJson::JsonArray
+// ArduinoJson::JsonObject
 // const ConstantString *
 //
 // For more info read about ArduinoJson parsing https://github.com/janelia-arduino/ArduinoJson
@@ -609,15 +609,13 @@ void UltravioletDetectorInterface::getWavelengthsHandler()
 
 void UltravioletDetectorInterface::setWavelengthsHandler()
 {
-  ArduinoJson::JsonArray * wavelengths_ptr;
-  modular_server_.parameter(constants::wavelengths_parameter_name).getValue(wavelengths_ptr);
+  ArduinoJson::JsonArray wavelengths_ja;
+  modular_server_.parameter(constants::wavelengths_parameter_name).getValue(wavelengths_ja);
 
   WavelengthArray wavelengths;
-  for (ArduinoJson::JsonArray::iterator it=wavelengths_ptr->begin();
-       it != wavelengths_ptr->end();
-       ++it)
+  for (long wavelength : wavelengths_ja)
   {
-    wavelengths.push_back(*it);
+    wavelengths.push_back(wavelength);
   }
   bool success = setWavelengths(wavelengths);
   if (!success)
