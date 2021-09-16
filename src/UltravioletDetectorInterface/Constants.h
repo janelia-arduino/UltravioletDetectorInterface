@@ -3,7 +3,7 @@
 //
 //
 // Authors:
-// Peter Polidoro peterpolidoro@gmail.com
+// Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
 #ifndef ULTRAVIOLET_DETECTOR_INTERFACE_CONSTANTS_H
 #define ULTRAVIOLET_DETECTOR_INTERFACE_CONSTANTS_H
