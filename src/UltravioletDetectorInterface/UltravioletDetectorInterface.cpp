@@ -5,7 +5,7 @@
 // Authors:
 // Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
-#include "../UltravioletDetectorInterface.h"
+#include "UltravioletDetectorInterface.h"
 
 
 using namespace ultraviolet_detector_interface;
